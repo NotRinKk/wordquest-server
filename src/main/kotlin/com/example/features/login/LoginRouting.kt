@@ -23,6 +23,9 @@ fun Application.configureSerializationUserLogin(repository: PostgresUserReposito
                     if (user.password_hash == userRecieve.password_hash) {
                         call.respond(HttpStatusCode.OK)
                     }
+                    else {
+                        call.respond(HttpStatusCode.BadRequest, "Invalid password")
+                    }
                 }
             } catch (ex: IllegalStateException) {
                 call.respond(HttpStatusCode.BadRequest)
