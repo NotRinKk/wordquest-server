@@ -12,6 +12,3 @@ object UsersTable : Table("users") {
     val password_hash = varchar("password_hash", 255)
     val email = varchar("email", 100)
 }
-
-suspend fun <T> suspendTransaction(block: Transaction.() -> T): T =
-    newSuspendedTransaction (Dispatchers.IO, statement = block)

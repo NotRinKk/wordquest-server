@@ -8,13 +8,13 @@ import io.ktor.server.routing.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.serialization.*
-import io.ktor.serialization.kotlinx.json.*
-import io.ktor.server.plugins.contentnegotiation.*
+//import io.ktor.serialization.kotlinx.json.*
+//import io.ktor.server.plugins.contentnegotiation.*
 
-fun Application.configureSerializationUser(repository: PostgresUserRepository) {
-    install(ContentNegotiation) {
-        json()
-    }
+fun Application.configureSerializationUserRegister(repository: PostgresUserRepository) {
+//    install(ContentNegotiation) {
+//        json()
+//    }
         routing {
         post("/api/users/register") {
             try {
