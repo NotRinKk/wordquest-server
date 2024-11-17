@@ -5,8 +5,9 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Application.configureRouting() {
+
     routing {
-        get("/") {
+        get("/api/users/login") {
             call.respondText("Hello World!")
         }
     }

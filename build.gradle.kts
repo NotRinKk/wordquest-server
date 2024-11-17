@@ -36,4 +36,7 @@ dependencies {
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.2")
+    implementation ("org.jetbrains.exposed:exposed-java-time:0.52.0")
+    implementation("org.jetbrains.exposed:exposed-dao:0.56.0")
+    implementation("org.postgresql:postgresql:42.7.2")
 }
