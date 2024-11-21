@@ -1,6 +1,6 @@
 package com.example.features.register
 
-import com.example.database.dao.PostgresUserRepository
+import com.example.database.dao.user.PostgresUserRepository
 import com.example.database.dto.User
 import io.ktor.server.application.*
 import io.ktor.http.*
@@ -30,7 +30,6 @@ fun Application.configureSerializationUserRegister(repository: PostgresUserRepos
                 call.application.environment.log.error("Error processing registration", e)
                 call.respond(HttpStatusCode.InternalServerError)
             }
-
         }
     }
 }

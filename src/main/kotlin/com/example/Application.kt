@@ -1,6 +1,8 @@
 package com.example
 
-import com.example.database.dao.PostgresUserRepository
+import com.example.database.dao.user.PostgresUserRepository
+import com.example.database.dao.words.PostgresWordDataRepository
+import com.example.features.defenition.configureSerializationWordDefinition
 import com.example.features.login.configureSerializationUserLogin
 //import com.example.features.register.configureRegisterRouting
 import com.example.features.register.configureSerializationUserRegister
@@ -14,11 +16,13 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
-    val repository = PostgresUserRepository()
+    val userRepository = PostgresUserRepository()
+    val wordRepository = PostgresWordDataRepository()
     configureDatabases()
     configureSerialization()
-    configureSerializationUserRegister(repository)
-    configureSerializationUserLogin(repository)
+    configureSerializationUserRegister(userRepository)
+    configureSerializationUserLogin(userRepository)
+    configureSerializationWordDefinition(wordRepository)
     configureMonitoring()
     configureRouting()
 }

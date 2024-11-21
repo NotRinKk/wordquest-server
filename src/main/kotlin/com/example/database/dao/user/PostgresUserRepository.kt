@@ -1,4 +1,4 @@
-package com.example.database.dao
+package com.example.database.dao.user
 
 import com.example.database.dto.User
 import com.example.database.models.UsersTable

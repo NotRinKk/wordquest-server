@@ -1,6 +1,6 @@
 package com.example
 
-import com.example.database.dao.PostgresUserRepository
+import com.example.database.dao.user.PostgresUserRepository
 import io.ktor.server.testing.*
 import kotlin.test.*
 

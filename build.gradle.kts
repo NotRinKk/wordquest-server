@@ -35,6 +35,11 @@ dependencies {
     implementation(libs.ktor.server.config.yaml)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
+
+    implementation("io.ktor:ktor-client-core:3.0.1")
+    implementation("io.ktor:ktor-client-cio:3.0.1")
+    implementation("io.ktor:ktor-client-okhttp:3.0.1")
+
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.2")
     implementation ("org.jetbrains.exposed:exposed-java-time:0.52.0")
     implementation("org.jetbrains.exposed:exposed-dao:0.56.0")
