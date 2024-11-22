@@ -1,10 +1,14 @@
 package com.example.database.dao.words
 
 import ApiWordMeaningItem
+import com.example.database.dto.NewWordResponse
+import com.example.database.dto.Translation
 import com.example.database.dto.TranslationResponse
 import com.example.database.models.*
 import com.example.database.suspendTransaction
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.notInList
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.insertIgnore
 import org.jetbrains.exposed.sql.selectAll
@@ -128,4 +132,68 @@ class PostgresWordDataRepository {
         }
     }
 
+    suspend fun getNewRandomWord(excludedIds: List<Int>): NewWordResponse = suspendTransaction {
+        // 1. Получаем случайное слово, исключая те, чьи id уже присутствуют в запросе
+        val wordId = Words
+            .select(Words.id)
+            .where( Words.id notInList excludedIds)
+            .orderBy(Words.id)
+            .limit(1)
+            .single()
+            .get(Words.id)
+            .value
+
+        // 2. Получаем текст слова
+        val wordText = Words
+            .select(Words.wordText)
+            .where( Words.id eq wordId)
+            .single()
+            .get(Words.wordText)
+
+        // 3. Получаем перевод слова
+        val translation = Translations
+            .select(Translations.translation)
+            .where ( Translations.wordDataId eq wordId )
+            .limit(1)
+            .single()
+            .get(Translations.translation)
+
+        // 4. Получаем определение и перевод определения
+        val definitions = WordsData
+            .select(WordsData.definition)
+            .where(WordsData.wordId eq wordId)
+            .map { it[WordsData.definition] }
+
+        val definitionTranslations = DefinitionTranslations
+            .select( DefinitionTranslations.definition)
+            .where( DefinitionTranslations.wordDataId eq wordId)
+            .map { it[DefinitionTranslations.definition] }
+
+        // 5. Получаем примеры предложений
+        val exampleSentences = ExampleSentences
+            .select(ExampleSentences.exampleSentence)
+            .where(ExampleSentences.wordDataId eq wordId)
+            .map { it[ExampleSentences.exampleSentence] }
+
+        val exampleSentencesIds = ExampleSentences
+            .select(ExampleSentences.id)
+            .where(ExampleSentences.wordDataId eq wordId)
+            .map { it[ExampleSentences.id].value }
+
+        // 6. Получаем переводы примеров предложений
+        val exampleSentencesTranslations = ExampleSentenceTranslations
+            .select(ExampleSentenceTranslations.exampleSentenceTranslation)
+            .where(ExampleSentenceTranslations.exampleSentenceId inList exampleSentencesIds)
+            .map { it[ExampleSentenceTranslations.exampleSentenceTranslation] }
+
+        NewWordResponse(
+            wordId = wordId,
+            wordText = wordText,
+            translation = translation,
+            definition = definitions,
+            definitionTranslation = definitionTranslations,
+            exampleSentences = exampleSentences,
+            exampleSentenceTranslations = exampleSentencesTranslations
+        )
+    }
 }

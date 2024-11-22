@@ -8,18 +8,13 @@ import io.ktor.server.routing.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.serialization.*
-//import io.ktor.serialization.kotlinx.json.*
-//import io.ktor.server.plugins.contentnegotiation.*
 
 fun Application.configureSerializationUserRegister(repository: PostgresUserRepository) {
-//    install(ContentNegotiation) {
-//        json()
-//    }
+
         routing {
         post("/api/users/register") {
             try {
                 val username = call.receive<User>()
-                call.application.environment.log.info("$username ADD")
                 repository.addUser(username)
                 call.respond(HttpStatusCode.Created)
             } catch (ex: IllegalStateException) {
