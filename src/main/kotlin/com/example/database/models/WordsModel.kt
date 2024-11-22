@@ -22,7 +22,6 @@ object WordsData : IntIdTable("words_data") {
     val partOfSpeech = varchar("part_of_speech", 25).nullable() // Часть речи
     val audioUrl = varchar("audio_url", 255).nullable() // URL аудио
     val definition = text("definition") // Определение
-    //val createdAt = datetime("created_at").defaultExpression(CurrentDateTime) // Время создания
     val createdAt = timestamp("created_at").defaultExpression(CurrentTimestamp)
 
 }

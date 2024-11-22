@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 data class NewWordResponse(
     val wordId: Int,
     val wordText: String,
+    val audioUrl: String,
     val translation: String,
     val definition: List<String>,
     val definitionTranslation: List<String>,

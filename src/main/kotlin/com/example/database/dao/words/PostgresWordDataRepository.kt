@@ -186,9 +186,17 @@ class PostgresWordDataRepository {
             .where(ExampleSentenceTranslations.exampleSentenceId inList exampleSentencesIds)
             .map { it[ExampleSentenceTranslations.exampleSentenceTranslation] }
 
+        // 7. Получаем ссылку на аудиозапись
+        val wordAudioUrl = WordsData
+            .select(WordsData.audioUrl)
+            .where(WordsData.wordId eq wordId)
+            .firstOrNull()
+            ?.get(WordsData.audioUrl)
+
         NewWordResponse(
             wordId = wordId,
             wordText = wordText,
+            audioUrl = wordAudioUrl ?: "",
             translation = translation,
             definition = definitions,
             definitionTranslation = definitionTranslations,
