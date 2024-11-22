@@ -14,15 +14,19 @@ fun Application.configureSerializationUserRegister(repository: PostgresUserRepos
         routing {
         post("/api/users/register") {
             try {
-                val username = call.receive<User>()
-                repository.addUser(username)
-                call.respond(HttpStatusCode.Created)
+                val user = call.receive<User>()
+                val userRegistered = repository.fetchUserByUsername(user.username)
+                if (userRegistered == null) {
+                    repository.addUser(user)
+                    call.respond(HttpStatusCode.Created, "User registered successfully")
+                } else {
+                    call.respond(HttpStatusCode.Conflict,  "User with this username already exists")
+                }
             } catch (ex: IllegalStateException) {
-                call.respond(HttpStatusCode.BadRequest)
+                call.respond(HttpStatusCode.BadRequest, "Error: ${ex.message}")
             } catch (ex: JsonConvertException) {
                 call.respond(HttpStatusCode.BadRequest)
             } catch (e: Exception) {
-                call.application.environment.log.error("Error processing registration", e)
                 call.respond(HttpStatusCode.InternalServerError)
             }
         }

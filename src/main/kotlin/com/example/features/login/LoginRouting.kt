@@ -21,21 +21,19 @@ fun Application.configureSerializationUserLogin(repository: PostgresUserReposito
                     call.respond(HttpStatusCode.BadRequest, "User not found")
                 } else {
                     if (user.password_hash == userRecieve.password_hash) {
-                        call.respond(HttpStatusCode.OK)
+                        call.respond(HttpStatusCode.OK, "User logged in successfully")
                     }
                     else {
-                        call.respond(HttpStatusCode.BadRequest, "Invalid password")
+                        call.respond(HttpStatusCode.Unauthorized, "Invalid password")
                     }
                 }
             } catch (ex: IllegalStateException) {
-                call.respond(HttpStatusCode.BadRequest)
+                call.respond(HttpStatusCode.BadRequest, "Error: ${ex.message}")
             } catch (ex: JsonConvertException) {
-                call.respond(HttpStatusCode.BadRequest)
+                call.respond(HttpStatusCode.BadRequest, "Invalid input data")
             } catch (e: Exception) {
-                call.application.environment.log.error("Error processing login", e)
                 call.respond(HttpStatusCode.InternalServerError)
             }
-
         }
     }
 }
