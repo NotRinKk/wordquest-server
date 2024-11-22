@@ -27,7 +27,6 @@ fun Application.configureSerializationWordDefinition(repository: PostgresWordDat
                 wordDefinition.forEach{ defenition ->
                     repository.insertWordData(defenition)
                 }
-
                 call.respond(HttpStatusCode.Created)
             } catch (ex: IllegalArgumentException) {
                 call.respond(HttpStatusCode.BadRequest, "ERROR")

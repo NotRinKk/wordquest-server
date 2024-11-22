@@ -28,7 +28,6 @@ class PostgresWordDataRepository {
             .first()
             .value
 
-        //var wordDataIdList = listOf<Int>()
         wordDefinition.meanings.forEach { meaning ->
             val wordDataId = WordsData
                 .insert {
@@ -79,7 +78,6 @@ class PostgresWordDataRepository {
                     .where(ExampleSentences.wordDataId eq wordData[WordsData.wordId])
                     .map { it[ExampleSentences.exampleSentence] }
                 // Получаем значения из Definition
-
                 wordDataList.add(WordTranslationData(wordData[WordsData.wordId],wordText, definitions, exampleSentences))
             }
 
@@ -88,12 +86,11 @@ class PostgresWordDataRepository {
     }
 
     suspend fun saveTranslations(wordDataId: Int, translations: TranslationResponse, definitionCount: Int, exampleCount: Int) = suspendTransaction {
-
         // 1. Сохраняем перевод самого слова в таблицу Translations
         if (translations.translations.isNotEmpty()) {
             val wordTranslation = translations.translations.firstOrNull()
             wordTranslation?.let {
-                Translations.insert {
+                Translations.insertIgnore {
                     it[Translations.wordDataId] = wordDataId
                     it[Translations.translation] = wordTranslation.text
                 }
@@ -101,18 +98,17 @@ class PostgresWordDataRepository {
 
             // 2. Сохраняем все переводы определения в таблицу DefinitionTranslations
             for(i in 1..definitionCount) {
-                DefinitionTranslations.insert{
+                DefinitionTranslations.insertIgnore{
                     it[DefinitionTranslations.wordDataId] = wordDataId
                     it[DefinitionTranslations.definition] = translations.translations[i].text
                 }
             }
-            // 3. Получаем примеры предложений для текущего слова (wordDataId)
 
+            // 3. Получаем примеры предложений для текущего слова (wordDataId)
             val exampleSentencesIds = ExampleSentences
                 .select (ExampleSentences.id)
                 .where(ExampleSentences.wordDataId eq wordDataId)
                 .map { it[ExampleSentences.id].value}
-
 
             val exampleSentencesIdCount = exampleSentencesIds.count()
 
@@ -121,7 +117,7 @@ class PostgresWordDataRepository {
 
                 // 4. Сохраняем переводы примеров предложений в таблицу ExampleSentenceTranslations
                 for (i in (definitionCount + 1)..(definitionCount + exampleCount)) {
-                    ExampleSentenceTranslations.insert {
+                    ExampleSentenceTranslations.insertIgnore {
                         it[ExampleSentenceTranslations.exampleSentenceId] = exampleSentencesIds[exampleId]
                         it[ExampleSentenceTranslations.langId] = 1
                         it[ExampleSentenceTranslations.exampleSentenceTranslation] = translations.translations[i].text
@@ -131,4 +127,5 @@ class PostgresWordDataRepository {
             }
         }
     }
+
 }

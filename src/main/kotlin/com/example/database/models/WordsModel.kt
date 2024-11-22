@@ -30,26 +30,26 @@ object WordsData : IntIdTable("words_data") {
 // Таблица для перевода слов
 object Translations : IntIdTable("translations") {
     val wordDataId = integer("word_id")
-    val translation = text("translation") // Перевод слова
+    val translation = text("translation").uniqueIndex() // Перевод слова
 }
 
 // Таблица для перевода определений слов
 object DefinitionTranslations : IntIdTable("defenition_translations") {
     val wordDataId = integer("word_id")
-    val definition = text("defenition") // Перевод слова
+    val definition = text("defenition").uniqueIndex() // Перевод слова
 }
 
 // Таблица для примеров предложений
 object ExampleSentences : IntIdTable("example_sentences") {
     val wordDataId = integer("word_id")
-    val exampleSentence = text("example_sentence") // Пример предложения
+    val exampleSentence = text("example_sentence").uniqueIndex() // Пример предложения
 }
 
 // Таблица для переводов примеров предложений
 object ExampleSentenceTranslations : IntIdTable("example_sentences_translations") {
     val exampleSentenceId = integer("example_sentence_id")
     val langId = integer("lang_id")
-    val exampleSentenceTranslation = text("example_sentence_translation") // Перевод примера
+    val exampleSentenceTranslation = text("example_sentence_translation").uniqueIndex() // Перевод примера
 
 }
 
