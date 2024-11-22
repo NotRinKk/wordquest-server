@@ -21,11 +21,13 @@ fun Application.configureSerializationWordDefinition(repository: PostgresWordDat
             }
             try {
                 val apiService = ApiService(client)
+
                 val wordDefinition = apiService.getWordMeaning(word)
+
                 wordDefinition.forEach{ defenition ->
                     repository.insertWordData(defenition)
                 }
-                //call.respond(wordDefinition)
+
                 call.respond(HttpStatusCode.Created)
             } catch (ex: IllegalArgumentException) {
                 call.respond(HttpStatusCode.BadRequest, "ERROR")

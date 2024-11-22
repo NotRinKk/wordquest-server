@@ -6,6 +6,7 @@ import com.example.features.defenition.configureSerializationWordDefinition
 import com.example.features.login.configureSerializationUserLogin
 //import com.example.features.register.configureRegisterRouting
 import com.example.features.register.configureSerializationUserRegister
+import com.example.features.translation.configureSerializationWordDataTranslation
 import com.example.utils.configureDatabases
 import io.ktor.server.application.*
 
@@ -23,6 +24,6 @@ fun Application.module() {
     configureSerializationUserRegister(userRepository)
     configureSerializationUserLogin(userRepository)
     configureSerializationWordDefinition(wordRepository)
-    configureMonitoring()
+    configureSerializationWordDataTranslation(wordRepository)
     configureRouting()
 }

@@ -1,8 +1,6 @@
 package com.example.database.models
 
 import org.jetbrains.exposed.dao.id.IntIdTable
-import org.jetbrains.exposed.sql.ReferenceOption
-import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.*
 
 // Таблица для языков
@@ -19,11 +17,11 @@ object Words : IntIdTable("words") {
 
 // Таблица для данных слов по языкам
 object WordsData : IntIdTable("words_data") {
-    val wordId = integer("word_id").references(Words.id, onDelete = ReferenceOption.CASCADE) // Ссылка на таблицу Words
-    val langId = integer("lang_id").references(Langs.id, onDelete = ReferenceOption.CASCADE) // Ссылка на таблицу Langs
+    val wordId = integer("word_id")
+    val langId = integer("lang_id")
     val partOfSpeech = varchar("part_of_speech", 25).nullable() // Часть речи
     val audioUrl = varchar("audio_url", 255).nullable() // URL аудио
-    val definition = text("definition").nullable() // Определение
+    val definition = text("definition") // Определение
     //val createdAt = datetime("created_at").defaultExpression(CurrentDateTime) // Время создания
     val createdAt = timestamp("created_at").defaultExpression(CurrentTimestamp)
 
@@ -31,29 +29,35 @@ object WordsData : IntIdTable("words_data") {
 
 // Таблица для перевода слов
 object Translations : IntIdTable("translations") {
-    val wordDataId = integer("word_data_id").references(WordsData.id, onDelete = ReferenceOption.CASCADE) // Ссылка на таблицу WordsData
+    val wordDataId = integer("word_id")
     val translation = text("translation") // Перевод слова
+}
+
+// Таблица для перевода определений слов
+object DefinitionTranslations : IntIdTable("defenition_translations") {
+    val wordDataId = integer("word_id")
+    val definition = text("defenition") // Перевод слова
 }
 
 // Таблица для примеров предложений
 object ExampleSentences : IntIdTable("example_sentences") {
-    val wordDataId = integer("word_data_id").references(WordsData.id, onDelete = ReferenceOption.CASCADE) // Ссылка на таблицу WordsData
+    val wordDataId = integer("word_id")
     val exampleSentence = text("example_sentence") // Пример предложения
 }
 
 // Таблица для переводов примеров предложений
 object ExampleSentenceTranslations : IntIdTable("example_sentences_translations") {
-    val exampleSentenceId = integer("example_sentence_id").references(ExampleSentences.id, onDelete = ReferenceOption.CASCADE) // Ссылка на таблицу ExampleSentences
-    val langId = integer("lang_id").references(Langs.id, onDelete = ReferenceOption.CASCADE) // Ссылка на таблицу Langs
+    val exampleSentenceId = integer("example_sentence_id")
+    val langId = integer("lang_id")
     val exampleSentenceTranslation = text("example_sentence_translation") // Перевод примера
 
 }
 
 // Таблица для выученных слов пользователя
 object UserLearnedWords : IntIdTable("user_learned_words") {
-    val userId = integer("user_id").references(UsersTable.id, onDelete = ReferenceOption.CASCADE)
-    val langId = integer("lang_id").references(Langs.id, onDelete = ReferenceOption.CASCADE)
-    val wordDataId = integer("word_data_id").references(WordsData.id, onDelete = ReferenceOption.CASCADE)
+    val userId = integer("user_id")
+    val langId = integer("lang_id")
+    val wordDataId = integer("word_data_id")
     val learnedDate = date("learned_date")
 
 }

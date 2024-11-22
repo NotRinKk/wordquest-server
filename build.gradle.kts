@@ -37,8 +37,11 @@ dependencies {
     testImplementation(libs.kotlin.test.junit)
 
     implementation("io.ktor:ktor-client-core:3.0.1")
+    implementation("io.ktor:ktor-client-json:3.0.1")
+    implementation("io.ktor:ktor-client-serialization:3.0.1")
     implementation("io.ktor:ktor-client-cio:3.0.1")
     implementation("io.ktor:ktor-client-okhttp:3.0.1")
+    implementation("io.ktor:ktor-client-logging:3.0.1")
 
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.2")
     implementation ("org.jetbrains.exposed:exposed-java-time:0.52.0")
